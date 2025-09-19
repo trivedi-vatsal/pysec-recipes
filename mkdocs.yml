@@ -58,14 +58,10 @@ nav:
 plugins:
   - search:
       separator: '[\s\-,:!=\[\]()"/]+'
-      prebuild_index: true
   - git-revision-date-localized:
       enable_creation_date: true
   - minify:
       minify_html: true
-  - sitemap:
-      changefreq: daily
-      priority: 0.5
 
 markdown_extensions:
   - attr_list
