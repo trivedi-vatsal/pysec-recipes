@@ -11,20 +11,17 @@ on:
   pull_request:
     paths:
       - "sample/requirements.txt"
-
 env:
-  PYTHON_VERSION: "3.11"
+  PYTHON_VERSION: "3.11" # Update this to your preferred Python version
 
 jobs:
-  sample-security-audit:
-    name: Sample Requirements Security Audit
+  security-audit:
+    name: Security Audit
     runs-on: ubuntu-latest
-    
     permissions:
       contents: read
       issues: write
       security-events: write
-      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -35,214 +32,232 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install security audit tools
-        run: |
-          pip install --upgrade pip
-          pip install pip-audit safety bandit
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
 
-      - name: Create audit output directory
-        run: mkdir -p audit-outputs
-
-      - name: Run pip-audit on sample requirements
-        id: pip-audit
+      - name: Install pip-audit with uv
         run: |
-          echo "🔍 Running pip-audit on sample/requirements.txt..."
-          
-          # Run pip-audit with JSON output
-          pip-audit -r sample/requirements.txt \
-            --format json \
-            --output audit-outputs/pip-audit-sample.json || true
-          
-          # Run pip-audit with markdown output for readability
-          pip-audit -r sample/requirements.txt \
-            --format markdown \
-            --output audit-outputs/pip-audit-sample.md || true
-          
-          # Count vulnerabilities
-          if [ -f "audit-outputs/pip-audit-sample.json" ]; then
-            VULN_COUNT=$(jq '[.dependencies[].vulns[]] | length' audit-outputs/pip-audit-sample.json)
-            echo "pip_audit_vulns=$VULN_COUNT" >> $GITHUB_OUTPUT
-            echo "Found $VULN_COUNT vulnerabilities with pip-audit"
-          else
-            echo "pip_audit_vulns=0" >> $GITHUB_OUTPUT
+          uv pip install --system pip-audit
+
+      - name: Run pip-audit (JSON output)
+        id: audit-json
+        run: |
+          echo "Running pip-audit on requirements.txt..."
+
+          # Create outputs directory
+          mkdir -p audit-outputs
+
+          # Run pip-audit with JSON output for processing
+          pip-audit -r requirements.txt --format json --output audit-outputs/audit-results.json || echo "AUDIT_FAILED=true" >> $GITHUB_ENV
+
+          # Also create human-readable formats
+          pip-audit -r requirements.txt --format markdown --output audit-outputs/audit-results.md || true
+          pip-audit -r requirements.txt --format columns --output audit-outputs/audit-results.txt || true
+
+      - name: Process audit results
+        id: process-results
+        run: |
+          # Check if audit results file exists
+          if [ ! -f "audit-outputs/audit-results.json" ]; then
+            echo "ERROR: Audit results file not found"
+            echo "AUDIT_STATUS=error" >> $GITHUB_ENV
+            exit 1
           fi
 
-      - name: Run Safety check on sample requirements
-        id: safety-check
-        run: |
-          echo "🔍 Running Safety check on sample/requirements.txt..."
-          
-          # Install dependencies first
-          pip install -r sample/requirements.txt
-          
-          # Run safety check
-          safety check --json --output audit-outputs/safety-sample.json || true
-          safety check --output audit-outputs/safety-sample.txt || true
-          
-          # Count safety issues
-          if [ -f "audit-outputs/safety-sample.json" ]; then
-            SAFETY_COUNT=$(jq 'length' audit-outputs/safety-sample.json)
-            echo "safety_vulns=$SAFETY_COUNT" >> $GITHUB_OUTPUT
-            echo "Found $SAFETY_COUNT vulnerabilities with Safety"
+          # Parse JSON results
+          VULN_COUNT=$(jq '[.dependencies[].vulns[]] | length' audit-outputs/audit-results.json)
+          AFFECTED_PACKAGES=$(jq -r '.dependencies[] | select(.vulns | length > 0) | .name' audit-outputs/audit-results.json | wc -l)
+
+          echo "VULN_COUNT=$VULN_COUNT" >> $GITHUB_ENV
+          echo "AFFECTED_PACKAGES=$AFFECTED_PACKAGES" >> $GITHUB_ENV
+
+          if [ "$VULN_COUNT" -eq 0 ]; then
+            echo "AUDIT_STATUS=clean" >> $GITHUB_ENV
+            echo "No vulnerabilities found!"
           else
-            echo "safety_vulns=0" >> $GITHUB_OUTPUT
+            echo "AUDIT_STATUS=vulnerabilities_found" >> $GITHUB_ENV
+            echo "Found $VULN_COUNT vulnerabilities in $AFFECTED_PACKAGES packages"
           fi
 
-      - name: Run Bandit security analysis
-        id: bandit-check
-        run: |
-          echo "🔍 Running Bandit analysis..."
-          
-          # Create a simple Python file to test Bandit with the dependencies
-          cat > test_imports.py << 'EOF'
-          # Test file to check imports for security issues
-          try:
-              import requests
-              import flask
-              import click
-              import jinja2
-              import werkzeug
-              import itsdangerous
-              import markupsafe
-              print("All imports successful")
-          except ImportError as e:
-              print(f"Import error: {e}")
-          EOF
-          
-          # Run Bandit
-          bandit -f json -o audit-outputs/bandit-sample.json test_imports.py || true
-          bandit -f txt -o audit-outputs/bandit-sample.txt test_imports.py || true
+          # Create summary for issue body
+          echo "## 🔍 Security Audit Summary" > audit-outputs/issue-body.md
+          echo "" >> audit-outputs/issue-body.md
+          echo "**Scan Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> audit-outputs/issue-body.md
+          echo "**Repository:** ${{ github.repository }}" >> audit-outputs/issue-body.md
+          echo "**Branch:** ${{ github.ref_name }}" >> audit-outputs/issue-body.md
+          echo "**Commit:** ${{ github.sha }}" >> audit-outputs/issue-body.md
+          echo "" >> audit-outputs/issue-body.md
+          echo "**Vulnerabilities Found:** $VULN_COUNT" >> audit-outputs/issue-body.md
+          echo "**Affected Packages:** $AFFECTED_PACKAGES" >> audit-outputs/issue-body.md
+          echo "" >> audit-outputs/issue-body.md
 
-      - name: Generate summary report
-        run: |
-          echo "📊 Generating security audit summary..."
-          
-          cat > audit-outputs/summary-report.md << 'EOF'
-          # Security Audit Summary for Sample Requirements
-          
-          **Date:** $(date)
-          **File:** sample/requirements.txt
-          **Workflow:** ${{ github.workflow }}
-          **Run ID:** ${{ github.run_id }}
-          
-          ## 🔍 Audit Results
-          
-          ### pip-audit Results
-          - **Vulnerabilities Found:** ${{ steps.pip-audit.outputs.pip_audit_vulns }}
-          
-          ### Safety Check Results  
-          - **Vulnerabilities Found:** ${{ steps.safety-check.outputs.safety_vulns }}
-          
-          ## 📁 Generated Reports
-          - `pip-audit-sample.json` - Detailed JSON report from pip-audit
-          - `pip-audit-sample.md` - Markdown report from pip-audit
-          - `safety-sample.json` - JSON report from Safety
-          - `safety-sample.txt` - Text report from Safety
-          - `bandit-sample.json` - JSON report from Bandit
-          - `bandit-sample.txt` - Text report from Bandit
-          
-          ## 📈 Recommendations
-          
-          EOF
-          
-          # Add vulnerability-specific recommendations
-          if [ "${{ steps.pip-audit.outputs.pip_audit_vulns }}" -gt "0" ] || [ "${{ steps.safety-check.outputs.safety_vulns }}" -gt "0" ]; then
-            cat >> audit-outputs/summary-report.md << 'EOF'
-          ⚠️ **Action Required:** Vulnerabilities detected in dependencies.
-          
-          1. Review the detailed reports in the artifacts
-          2. Update vulnerable packages to secure versions
-          3. Test thoroughly after updates
-          4. Consider using dependency pinning strategies
-          EOF
+          if [ "$VULN_COUNT" -gt 0 ]; then
+            echo "## 🚨 Vulnerability Details" >> audit-outputs/issue-body.md
+            echo "" >> audit-outputs/issue-body.md
+            cat audit-outputs/audit-results.md >> audit-outputs/issue-body.md
+            echo "" >> audit-outputs/issue-body.md
+            echo "## 📋 Recommendations" >> audit-outputs/issue-body.md
+            echo "" >> audit-outputs/issue-body.md
+            echo "1. Review each vulnerability listed above" >> audit-outputs/issue-body.md
+            echo "2. Update affected packages to the recommended fix versions" >> audit-outputs/issue-body.md
+            echo "3. Test the application after updates" >> audit-outputs/issue-body.md
+            echo "4. Consider using \`pip-audit --fix\` for automatic updates (with caution)" >> audit-outputs/issue-body.md
+            echo "" >> audit-outputs/issue-body.md
+            echo "## 🔧 Manual Fix Commands" >> audit-outputs/issue-body.md
+            echo "" >> audit-outputs/issue-body.md
+            echo "\`\`\`bash" >> audit-outputs/issue-body.md
+            echo "# Review the vulnerabilities" >> audit-outputs/issue-body.md
+            echo "pip-audit -r requirements.txt" >> audit-outputs/issue-body.md
+            echo "" >> audit-outputs/issue-body.md
+            echo "# Attempt automatic fixes (use with caution)" >> audit-outputs/issue-body.md
+            echo "pip-audit -r requirements.txt --fix" >> audit-outputs/issue-body.md
+            echo "\`\`\`" >> audit-outputs/issue-body.md
           else
-            cat >> audit-outputs/summary-report.md << 'EOF'
-          ✅ **All Clear:** No known vulnerabilities detected in current dependencies.
-          
-          - Continue monitoring for new vulnerabilities
-          - Keep dependencies updated regularly
-          - Consider automated dependency updates
-          EOF
+            echo "✅ **No vulnerabilities detected in requirements.txt**" >> audit-outputs/issue-body.md
+            echo "" >> audit-outputs/issue-body.md
+            echo "All dependencies appear to be secure based on the current vulnerability databases." >> audit-outputs/issue-body.md
           fi
+
+          echo "" >> audit-outputs/issue-body.md
+          echo "---" >> audit-outputs/issue-body.md
+          echo "*This issue was automatically generated by the Security Audit workflow.*" >> audit-outputs/issue-body.md
+          echo "*Workflow run: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*" >> audit-outputs/issue-body.md
 
       - name: Upload audit artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: sample-security-audit-${{ github.run_number }}
+          name: security-audit-results-${{ github.run_number }}
           path: audit-outputs/
-          retention-days: 30
+          retention-days: 90
 
-      - name: Comment on PR (if applicable)
-        if: github.event_name == 'pull_request'
+      - name: Create or update issue (vulnerabilities found)
+        if: env.AUDIT_STATUS == 'vulnerabilities_found'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            
-            let comment = `## 🔒 Security Audit Results\n\n`;
-            comment += `**pip-audit vulnerabilities:** ${{ steps.pip-audit.outputs.pip_audit_vulns }}\n`;
-            comment += `**Safety vulnerabilities:** ${{ steps.safety-check.outputs.safety_vulns }}\n\n`;
-            
-            if (${{ steps.pip-audit.outputs.pip_audit_vulns }} > 0 || ${{ steps.safety-check.outputs.safety_vulns }} > 0) {
-              comment += `⚠️ **Vulnerabilities detected!** Please review the audit artifacts for details.\n\n`;
-            } else {
-              comment += `✅ **No vulnerabilities detected** in the sample requirements.\n\n`;
-            }
-            
-            comment += `📊 View detailed reports in the [workflow artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).`;
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            const path = require('path');
+
+            // Read the issue body
+            const issueBody = fs.readFileSync('audit-outputs/issue-body.md', 'utf8');
+
+            // Check for existing open security audit issues
+            const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: comment
+              state: 'open',
+              labels: 'security,pip-audit',
+              per_page: 100
             });
 
-      - name: Create issue on high severity vulnerabilities
-        if: steps.pip-audit.outputs.pip_audit_vulns > 0 || steps.safety-check.outputs.safety_vulns > 0
+            const existingIssue = issues.find(issue =>
+              issue.title.includes('Security Audit') &&
+              issue.title.includes('vulnerabilities found')
+            );
+
+            const issueTitle = `🚨 Security Audit: ${process.env.VULN_COUNT} vulnerabilities found in dependencies`;
+
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                title: issueTitle,
+                body: issueBody,
+                labels: ['security', 'pip-audit', 'vulnerability', 'dependencies']
+              });
+
+              console.log(`Updated existing issue #${existingIssue.number}`);
+            } else {
+              // Create new issue
+              const { data: newIssue } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: issueBody,
+                labels: ['security', 'pip-audit', 'vulnerability', 'dependencies']
+              });
+
+              console.log(`Created new issue #${newIssue.number}`);
+            }
+
+      - name: Create clean audit issue (no vulnerabilities)
+        if: env.AUDIT_STATUS == 'clean' && github.event_name == 'schedule'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = `🚨 Security Vulnerabilities Detected in Sample Requirements`;
-            const body = `
-            ## Security Alert
-            
-            Vulnerabilities were detected during the automated security audit of \`sample/requirements.txt\`.
-            
-            ### Summary
-            - **pip-audit vulnerabilities:** ${{ steps.pip-audit.outputs.pip_audit_vulns }}
-            - **Safety vulnerabilities:** ${{ steps.safety-check.outputs.safety_vulns }}
-            - **Detected on:** ${new Date().toISOString()}
-            - **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            ### Action Required
-            1. Download and review the audit artifacts from the workflow run
-            2. Update vulnerable dependencies to secure versions
-            3. Test the application thoroughly after updates
-            4. Re-run the security audit to verify fixes
-            
-            ### Artifacts Available
-            - Detailed JSON and Markdown reports from pip-audit
-            - Safety check results
-            - Bandit static analysis results
-            
-            This issue was automatically created by the Sample Security Audit workflow.
-            `;
-            
-            github.rest.issues.create({
+            const fs = require('fs');
+
+            // Read the issue body
+            const issueBody = fs.readFileSync('audit-outputs/issue-body.md', 'utf8');
+
+            // Close any existing vulnerability issues
+            const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: title,
-              body: body,
-              labels: ['security', 'vulnerability', 'sample', 'automated']
+              state: 'open',
+              labels: 'security,pip-audit',
+              per_page: 100
             });
 
-      - name: Display summary
+            for (const issue of issues) {
+              if (issue.title.includes('vulnerabilities found')) {
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'completed'
+                });
+
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: '✅ Vulnerabilities have been resolved. This issue is now closed.'
+                });
+
+                console.log(`Closed resolved issue #${issue.number}`);
+              }
+            }
+
+            // Create a weekly clean report issue
+            const { data: newIssue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `✅ Weekly Security Audit: No vulnerabilities found`,
+              body: issueBody,
+              labels: ['security', 'pip-audit', 'clean']
+            });
+
+            // Auto-close the clean report issue after creation
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: newIssue.number,
+              state: 'closed',
+              state_reason: 'completed'
+            });
+
+            console.log(`Created clean audit report issue #${newIssue.number} (auto-closed)`);
+
+      - name: Comment on workflow status
+        if: always()
         run: |
-          echo "🔒 Sample Security Audit Complete!"
-          echo "=================================="
-          echo "pip-audit vulnerabilities: ${{ steps.pip-audit.outputs.pip_audit_vulns }}"
-          echo "Safety vulnerabilities: ${{ steps.safety-check.outputs.safety_vulns }}"
-          echo ""
-          echo "📊 Detailed reports available in workflow artifacts"
-          echo "🔗 Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "## 📊 Workflow Summary"
+          echo "- **Status:** ${{ job.status }}"
+          echo "- **Audit Status:** $AUDIT_STATUS"
+          echo "- **Vulnerabilities Found:** ${VULN_COUNT:-0}"
+          echo "- **Affected Packages:** ${AFFECTED_PACKAGES:-0}"
+          echo "- **Trigger:** ${{ github.event_name }}"
+          echo "- **Python Version:** ${{ env.PYTHON_VERSION }}"
+
+      - name: Fail workflow if vulnerabilities found
+        if: env.AUDIT_STATUS == 'vulnerabilities_found' && github.event_name != 'schedule'
+        run: |
+          echo "❌ Security vulnerabilities detected in dependencies!"
+          echo "Check the created issue for details and remediation steps."
+          exit 1
