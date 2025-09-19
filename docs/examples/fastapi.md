@@ -207,7 +207,7 @@ This recipe includes FastAPI-optimized security features:
     !!! tip "Fastest FastAPI Setup"
 
         ```bash title="FastAPI-specific installation"
-        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/fastapi-setup.py | python3
+        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/fastapi-setup.py | python3
         ```
 
 === "Manual Setup"
@@ -224,7 +224,7 @@ This recipe includes FastAPI-optimized security features:
 
             ```bash
             curl -o .github/workflows/fastapi-security.yml \
-              https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/workflows/fastapi-security.yml
+              https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/workflows/fastapi-security.yml
             ```
 
         3. **Ensure requirements structure:**

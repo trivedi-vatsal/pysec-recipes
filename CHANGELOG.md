@@ -110,4 +110,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-For more details about each release, see the [GitHub Releases](https://github.com/trivedi-vatsal/python-security-audit-recipe/releases) page.
+For more details about each release, see the [GitHub Releases](https://github.com/trivedi-vatsal/pysec-recipes/releases) page.

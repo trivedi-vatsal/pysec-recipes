@@ -89,7 +89,7 @@ Follow these simple steps to add security auditing to your project:
         Run this single command in your project root:
 
         ```bash title="One-command installation"
-        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/setup.py | python3
+        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/setup.py | python3
         ```
 
         **What this does:**
@@ -114,7 +114,7 @@ Follow these simple steps to add security auditing to your project:
 
             ```bash
             curl -o .github/workflows/security-audit.yml \
-              https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/workflows/security-audit.yml
+              https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/workflows/security-audit.yml
             ```
 
         3. **Ensure you have a requirements.txt file** in your project root

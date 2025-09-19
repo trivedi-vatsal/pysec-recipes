@@ -36,7 +36,7 @@ your-project/
 
 ```bash
 # Download the multi-environment recipe
-curl -O https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/sample/multi-environment-audit.yml
+curl -O https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/sample/multi-environment-audit.yml
 
 # Move to your workflows directory
 mv multi-environment-audit.yml .github/workflows/security-audit.yml
@@ -219,7 +219,7 @@ audit-outputs/
 
 ```bash
 # Download the multi-environment recipe
-curl -O https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/sample/multi-environment-audit.yml
+curl -O https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/sample/multi-environment-audit.yml
 
 # Create workflows directory
 mkdir -p .github/workflows

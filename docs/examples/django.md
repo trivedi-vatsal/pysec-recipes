@@ -196,7 +196,7 @@ This recipe includes specialized Django security features:
     !!! tip "Fastest Django Setup"
 
         ```bash title="Django-specific installation"
-        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/django-setup.py | python3
+        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/django-setup.py | python3
         ```
 
 === "Manual Setup"
@@ -213,7 +213,7 @@ This recipe includes specialized Django security features:
 
             ```bash
             curl -o .github/workflows/django-security.yml \
-              https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/workflows/django-security.yml
+              https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/workflows/django-security.yml
             ```
 
         3. **Set up requirements structure** (if not already done):

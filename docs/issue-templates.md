@@ -97,7 +97,7 @@ This template is used for weekly reports when no vulnerabilities are found.
         The templates are automatically installed when you use the one-command setup:
 
         ```bash
-        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/setup.py | python3
+        curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/setup.py | python3
         ```
 
     === "Option 2: Manual Installation"
@@ -110,11 +110,11 @@ This template is used for weekly reports when no vulnerabilities are found.
 
         # Download vulnerability report template
         curl -o .github/ISSUE_TEMPLATE/security-vulnerability-report.md \
-          https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/ISSUE_TEMPLATE/security-vulnerability-report.md
+          https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/ISSUE_TEMPLATE/security-vulnerability-report.md
 
         # Download clean audit template
         curl -o .github/ISSUE_TEMPLATE/clean-security-audit-report.md \
-          https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/ISSUE_TEMPLATE/clean-security-audit-report.md
+          https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/ISSUE_TEMPLATE/clean-security-audit-report.md
         ```
 
 ## Template Customization

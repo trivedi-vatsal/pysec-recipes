@@ -3,13 +3,30 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-enabled-blue.svg)](https://github.com/features/actions)
 [![pip-audit](https://img.shields.io/badge/security-pip--audit-red.svg)](https://github.com/pypa/pip-audit)
-[![Recipe](https://img.shields.io/badge/type-recipe-orange.svg)](https://github.com/trivedi-vatsal/python-security-audit-recipe)
+[![Recipe](https://img.shields.io/badge/type-recipe-orange.svg)](https://github.com/trivedi-vatsal/pysec-recipes)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://trivedi-vatsal.github.io/pysec-recipes/)
 
 > **The Ultimate Recipe for Python Security** 🚀
 
 A **production-ready GitHub Actions recipe** that transforms any Python project into a security-first codebase. This recipe automatically scans your dependencies for vulnerabilities, creates intelligent GitHub issues, and keeps your team informed about security risks—all with zero configuration required.
 
 **Why This Recipe?** Because security shouldn't be an afterthought. This recipe makes Python security auditing as simple as copying a file.
+
+## 📖 **Complete Documentation**
+
+🌟 **[View Full Documentation](https://trivedi-vatsal.github.io/pysec-recipes/)** - Comprehensive guides, examples, and tutorials
+
+### Quick Navigation
+
+| Section | Description |
+|---------|-------------|
+| 🚀 [**Getting Started**](https://trivedi-vatsal.github.io/pysec-recipes/getting-started/) | Quick overview and setup guide |
+| 💻 [**Installation**](https://trivedi-vatsal.github.io/pysec-recipes/installation/) | Step-by-step installation instructions |
+| ⚙️ [**Configuration**](https://trivedi-vatsal.github.io/pysec-recipes/configuration/) | Customize workflows for your needs |
+| 🔄 [**Workflow Guide**](https://trivedi-vatsal.github.io/pysec-recipes/workflow/) | Understand how the automation works |
+| 📋 [**Examples**](https://trivedi-vatsal.github.io/pysec-recipes/examples/) | Real-world usage examples |
+| 🎫 [**Issue Templates**](https://trivedi-vatsal.github.io/pysec-recipes/issue-templates/) | Automated issue management |
+| ❓ [**FAQs**](https://trivedi-vatsal.github.io/pysec-recipes/faqs/) | Common questions and troubleshooting |
 
 ## 🎯 What This Recipe Gives You
 
@@ -42,29 +59,50 @@ A **production-ready GitHub Actions recipe** that transforms any Python project 
 
 ## 🚀 Quick Start (30 Seconds)
 
-### Option 1: One-Command Setup (Recommended)
+> 📖 **[Full Installation Guide](https://trivedi-vatsal.github.io/pysec-recipes/installation/)** - Complete setup instructions with troubleshooting
+
+### Option 1: Basic Security Audit Workflow
+
+1. **Create the workflow directory**:
+   ```bash
+   mkdir -p .github/workflows
+   ```
+
+2. **Copy the main workflow**:
+   ```bash
+   curl -o .github/workflows/security-audit.yml \
+     https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/workflows/security-audit.yml
+   ```
+
+3. **Commit and push**:
+   ```bash
+   git add .github/workflows/security-audit.yml
+   git commit -m "Add security audit workflow"
+   git push
+   ```
+
+### Option 2: Complete Setup with Sample Workflow
+
+Include the sample requirements scanner we just created:
 
 ```bash
-# Run the automated setup script
-curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/setup.py | python3
-```
-
-### Option 2: Manual Setup
-
-```bash
-# Create the directory structure
+# Create directories
 mkdir -p .github/workflows .github/ISSUE_TEMPLATE
 
-# Copy the workflow file
-curl -O https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/workflows/security-audit.yml
-mv security-audit.yml .github/workflows/
+# Copy main workflow
+curl -o .github/workflows/security-audit.yml \
+  https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/workflows/security-audit.yml
+
+# Copy sample workflow
+curl -o .github/workflows/sample-security-audit.yml \
+  https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/workflows/sample-security-audit.yml
 
 # Copy issue templates
-curl -O https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/ISSUE_TEMPLATE/security-vulnerability-report.md
+curl -o .github/ISSUE_TEMPLATE/security-vulnerability-report.md \
+  https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/ISSUE_TEMPLATE/security-vulnerability-report.md
 
-curl -O https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/.github/ISSUE_TEMPLATE/clean-security-audit-report.md
-
-mv *.md .github/ISSUE_TEMPLATE/
+curl -o .github/ISSUE_TEMPLATE/clean-security-audit-report.md \
+  https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/.github/ISSUE_TEMPLATE/clean-security-audit-report.md
 ```
 
 ### 3. Customize (Optional)
@@ -178,310 +216,113 @@ your-repo/
 - Creates clean audit report (auto-closed)
 - Labels: `security`, `pip-audit`, `clean`
 
-## 📊 Recipe in Action
+## 📊 Recipe Examples
+
+> 📖 **[Complete Examples Guide](https://trivedi-vatsal.github.io/pysec-recipes/examples/)** - Real-world usage scenarios and configurations
+
+### Available Example Workflows
+
+| Example | Description | Use Case |
+|---------|-------------|----------|
+| 🔧 [**Basic Example**](https://trivedi-vatsal.github.io/pysec-recipes/examples/basic/) | Simple single-file security audit | Small projects, getting started |
+| 🌍 [**Multi-Environment**](https://trivedi-vatsal.github.io/pysec-recipes/examples/multi-environment/) | Scan dev, test, prod requirements | Complex projects with multiple environments |
+| 🐍 [**Django Project**](https://trivedi-vatsal.github.io/pysec-recipes/examples/django/) | Django-specific security scanning | Web applications using Django |
+| ⚡ [**FastAPI Project**](https://trivedi-vatsal.github.io/pysec-recipes/examples/fastapi/) | FastAPI security workflows | Modern API development |
+| 📦 [**Monorepo**](https://trivedi-vatsal.github.io/pysec-recipes/examples/monorepo/) | Multiple projects in one repository | Enterprise monorepo setups |
+| 🧪 [**Sample Scanner**](sample/) | Demo workflow for sample dependencies | Testing and learning |
+
+### 🧪 **Try the Sample Workflow**
+
+We've included a sample security audit workflow that scans the example dependencies in `sample/requirements.txt`. This is perfect for:
+
+- 🎯 **Learning** how the security workflows operate
+- 🧪 **Testing** the setup in your repository  
+- 📊 **Demonstrating** security scanning to your team
+- 🔍 **Understanding** the audit reports and issue creation
+
+**The sample workflow includes:**
+- Multiple security tools: `pip-audit`, `safety`, and `bandit`
+- Comprehensive reporting in JSON, Markdown, and text formats
+- Automated GitHub issue creation for vulnerabilities
+- Daily scheduled scans with manual trigger support
+- Pull request integration with status comments
+
+**Quick test:**
+1. The workflow file is already in `.github/workflows/sample-security-audit.yml`
+2. Go to **Actions** → **Sample Requirements Security Audit**
+3. Click **Run workflow** to see it in action
+4. Review the generated reports and issues
 
 ### 🚨 When Vulnerabilities Are Found
 
-The recipe automatically creates a detailed GitHub issue:
+> 📖 **[Complete Issue Examples](https://trivedi-vatsal.github.io/pysec-recipes/issue-templates/)** - Detailed issue templates and examples
 
-```markdown
-🚨 Security Audit: 3 vulnerabilities found in dependencies
-
-## 🔍 Security Audit Summary
-- Vulnerabilities Found: 3
-- Affected Packages: 2
-- Scan Date: 2025-09-19 08:00:00 UTC
-- Repository: your-org/your-project
-- Branch: main
-- Commit: abc123def456
-
-## 🚨 Vulnerability Details
-| Package | Version | Vulnerability ID | Fix Version | Severity |
-|---------|---------|------------------|-------------|----------|
-| requests | 2.25.1 | PYSEC-2023-74 | >=2.31.0 | HIGH |
-| urllib3 | 1.26.5 | GHSA-v845-jxx5-vc9f | >=1.26.17 | MEDIUM |
-| urllib3 | 1.26.5 | CVE-2023-45803 | >=2.0.7 | HIGH |
-
-## 🔧 Automatic Fix Commands
-```bash
-# Review the vulnerabilities
-pip-audit -r requirements.txt
-
-# Apply automatic fixes (use with caution)
-pip-audit -r requirements.txt --fix
-
-# Or update manually
-pip install "requests>=2.31.0" "urllib3>=2.0.7"
-```
-
-## 📋 Next Steps
-
-1. Review each vulnerability listed above
-2. Update affected packages to the recommended fix versions
-3. Test the application after updates
-4. Consider using `pip-audit --fix` for automatic updates
-
----
-*This issue was automatically generated by the Security Audit Recipe.*
-*Workflow run: [View Details](https://github.com/your-org/your-project/actions/runs/123456)*
+The recipe automatically creates a GitHub issue with:
+- � **Vulnerability summary** with affected packages and severity
+- 🛠️ **Fix commands** for automatic and manual remediation  
+- 📊 **Detailed reports** with links to security databases
+- 📋 **Next steps** with testing and update guidance
 
 ### ✅ When Everything Is Clean
 
-The recipe creates a clean audit report:
+Creates a clean audit report confirming:
+- ✅ No vulnerabilities detected in current dependencies
+- � Security recommendations and best practices
+- � Confirmation of regular monitoring schedule
 
-```markdown
-✅ Weekly Security Audit: No vulnerabilities found
-
-## 🔍 Security Audit Summary
-- **Status:** ✅ CLEAN - No vulnerabilities detected
-- **Scan Date:** 2025-09-19 08:00:00 UTC
-- **Dependencies Scanned:** 15 packages
-- **Vulnerability Databases:** PyPI Advisory, OSV, Python Packaging Advisory
-
-## 🛡️ Security Status
-✅ All packages are up-to-date with security patches
-✅ No known CVEs affecting current dependency versions
-✅ Dependencies are from trusted sources
-
-## 📈 Recommendations
-Even though no vulnerabilities were found, consider these security best practices:
-1. **Keep dependencies updated** - Regularly update to the latest stable versions
-2. **Monitor security advisories** - Subscribe to security notifications
-3. **Use dependency pinning** - Pin exact versions in production
-4. **Regular audits** - This automated scan runs weekly
-
----
-*This clean audit report was automatically generated by the Security Audit Recipe.*
-```
+**Example reports and templates available in the [documentation](https://trivedi-vatsal.github.io/pysec-recipes/issue-templates/).**
 
 ## ⚙️ Customizing Your Recipe
 
-### 🕐 **Change Scan Schedule**
+> � **[Complete Configuration Guide](https://trivedi-vatsal.github.io/pysec-recipes/configuration/)** - Detailed customization options and examples
 
-```yaml
-schedule:
-  # Daily at 2 AM UTC
-  - cron: "0 2 * * *"
-  
-  # Twice weekly (Monday & Thursday)
-  - cron: "0 8 * * 1,4"
-  
-  # Monthly on first Monday
-  - cron: "0 8 1-7 * 1"
-```
+### Quick Customization Examples
 
-### 📁 **Scan Additional Files**
+| Customization | Documentation Link |
+|---------------|-------------------|
+| � **Change Scan Schedule** | [Scheduling Guide](https://trivedi-vatsal.github.io/pysec-recipes/configuration/#scheduling) |
+| 📁 **Scan Multiple Files** | [Multi-file Setup](https://trivedi-vatsal.github.io/pysec-recipes/configuration/#multiple-files) |
+| 🚫 **Ignore Vulnerabilities** | [Exclusion Patterns](https://trivedi-vatsal.github.io/pysec-recipes/configuration/#exclusions) |
+| 🐍 **Python Version Control** | [Environment Setup](https://trivedi-vatsal.github.io/pysec-recipes/configuration/#python-versions) |
+| 🚨 **CI/CD Integration** | [Build Failures](https://trivedi-vatsal.github.io/pysec-recipes/configuration/#cicd-integration) |
+| 🔄 **Advanced Techniques** | [Advanced Usage](https://trivedi-vatsal.github.io/pysec-recipes/configuration/#advanced) |
 
-```yaml
-- name: Scan development dependencies
-  run: |
-    pip-audit -r requirements-dev.txt --format json --output dev-audit.json
-    pip-audit -r requirements-test.txt --format json --output test-audit.json
-```
+## � Recipe Troubleshooting
 
-### 🚫 **Ignore Specific Vulnerabilities**
+> 📖 **[Complete Troubleshooting Guide](https://trivedi-vatsal.github.io/pysec-recipes/faqs/)** - Detailed solutions and debugging help
 
-```yaml
-- name: Run pip-audit with exclusions
-  run: |
-    pip-audit -r requirements.txt \
-      --ignore-vuln CVE-2023-12345 \
-      --ignore-vuln GHSA-xxxx-xxxx-xxxx
-```
+### � **Common Issues & Quick Fixes**
 
-### 🐍 **Custom Python Version**
+| Issue | Quick Solution |
+|-------|----------------|
+| ❌ Workflow permissions error | Settings → Actions → General → "Read and write permissions" |
+| ❌ No requirements.txt found | Ensure `requirements.txt` exists in repository root |
+| ❌ pip-audit installation fails | Check network connectivity or GitHub Actions status |
+| ❌ Workflow not triggering | Verify GitHub Actions is enabled in repository settings |
 
-```yaml
-env:
-  PYTHON_VERSION: "3.12"  # or 3.9, 3.10, 3.11, etc.
-```
+### 🆘 **Need More Help?**
 
-### 🚨 **Fail CI/CD on Vulnerabilities**
-
-```yaml
-# Add this to fail builds on security issues
-- name: Fail on vulnerabilities
-  if: env.AUDIT_STATUS == 'vulnerabilities_found'
-  run: |
-    echo "❌ Security vulnerabilities detected!"
-    echo "Check the created issue for details and remediation steps."
-    exit 1
-```
-
-## 🛠️ Advanced Recipe Techniques
-
-### 🏠 **Local Development**
-
-Test your recipe locally before committing:
-
-```bash
-# Install pip-audit locally
-pip install pip-audit
-
-# Scan your requirements
-pip-audit -r requirements.txt
-
-# Generate detailed report
-pip-audit -r requirements.txt --desc --format json --output audit.json
-
-# Test automatic fixes (review carefully)
-pip-audit -r requirements.txt --fix --dry-run  # Preview changes
-pip-audit -r requirements.txt --fix            # Apply fixes
-```
-
-### 🔄 **Pre-commit Integration**
-
-Add security checks to every commit:
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/pypa/pip-audit
-    rev: v2.6.1
-    hooks:
-      - id: pip-audit
-        args: ['--desc', '--format=json']
-```
-
-### 🐳 **Docker Integration**
-
-Secure your container builds:
-
-```dockerfile
-# Add to your Dockerfile
-RUN pip install pip-audit
-RUN pip-audit -r requirements.txt --desc
-
-# Or as a separate security stage
-FROM python:3.11 as security-check
-COPY requirements.txt .
-RUN pip install pip-audit
-RUN pip-audit -r requirements.txt
-```
-
-### 📱 **Slack/Teams Notifications**
-
-Get instant notifications when vulnerabilities are found:
-
-```yaml
-- name: Notify on Slack
-  if: env.AUDIT_STATUS == 'vulnerabilities_found'
-  uses: 8398a7/action-slack@v3
-  with:
-    status: failure
-    text: "🚨 Security vulnerabilities found in ${{ github.repository }}"
-  env:
-    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-```
-
-### 🔍 **Matrix Strategy**
-
-Test multiple Python versions:
-
-```yaml
-jobs:
-  security-audit:
-    strategy:
-      matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
-    
-    steps:
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-```
-
-## 🔍 Recipe Troubleshooting
-
-### 🚨 **Common Issues & Solutions**
-
-#### **❌ Workflow permissions error**
-
-```markdown
-Error: Resource not accessible by integration
-```
-
-**Solution**: Go to Settings → Actions → General → Workflow permissions → Select "Read and write permissions"
-
-#### **❌ No requirements.txt found**
-
-```markdown
-ERROR: File not found: requirements.txt
-```
-
-**Solution**: Ensure `requirements.txt` exists in your repository root
-
-#### **❌ pip-audit installation fails**
-
-```markdown
-ERROR: Could not install packages due to an EnvironmentError
-```
-
-**Solution**: Check network connectivity or use alternative installation method
-
-#### **❌ Workflow not triggering**
-
-**Solution**: Check that GitHub Actions is enabled in your repository settings
-
-### 🐛 **Debug Mode**
-
-Add verbose logging to your recipe:
-
-```yaml
-- name: Debug pip-audit
-  run: |
-    pip-audit -r requirements.txt --verbose --format json
-```
-
-### 📊 **View Workflow Logs**
-
-1. Go to **Actions** tab in your repository
-2. Click on the failed workflow run
-3. Expand the failed step to see detailed logs
-4. Check the "Security Audit" step for specific error messages
-
-### 🆘 **Still Having Issues?**
-
-- **Check the [Issues](https://github.com/trivedi-vatsal/python-security-audit-recipe/issues)** for known problems
-- **Start a [Discussion](https://github.com/trivedi-vatsal/python-security-audit-recipe/discussions)** for help
-- **Review the [Documentation](https://trivedi-vatsal.github.io/python-security-audit-recipe/)** for detailed guides
+- **📖 [Full FAQ & Troubleshooting](https://trivedi-vatsal.github.io/pysec-recipes/faqs/)** - Comprehensive solutions
+- **🐛 [Report Issues](https://github.com/trivedi-vatsal/pysec-recipes/issues)** - Bug reports and feature requests
+- **💬 [Community Discussions](https://github.com/trivedi-vatsal/pysec-recipes/discussions)** - Get help from the community
 
 ## 📚 Additional Resources
 
-- **[pip-audit Documentation](https://github.com/pypa/pip-audit)** - Official tool documentation
-- **[GitHub Actions Security](https://docs.github.com/en/actions/security-guides)** - Security best practices
-- **[Python Security](https://python.org/dev/security/)** - Python security resources
-- **[PyPA Advisory Database](https://github.com/pypa/advisory-database)** - Vulnerability database
-- **[OSV Database](https://osv.dev/)** - Open Source Vulnerabilities
+> 📖 **[Complete Resource Library](https://trivedi-vatsal.github.io/pysec-recipes/)** - Links to all security tools and guides
+
+**Quick Links:**
+- **[pip-audit Documentation](https://github.com/pypa/pip-audit)** | **[GitHub Actions Security](https://docs.github.com/en/actions/security-guides)** | **[Python Security](https://python.org/dev/security/)**
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. Areas for improvement:
+> 📖 **[Contributing Guide](https://trivedi-vatsal.github.io/pysec-recipes/contributing/)** - Full development setup and contribution guidelines
 
-- 🔧 Additional workflow customizations
-- 📊 Enhanced reporting features  
-- 🔌 Integration with other security tools
-- 📖 Documentation improvements
-- 🐛 Bug fixes and optimizations
+Contributions welcome! Areas for improvement: workflow customizations, reporting features, security tool integrations, documentation, and bug fixes.
 
-### Development Setup
+## 📜 License & Changelog
 
-```bash
-git clone https://github.com/trivedi-vatsal/python-security-audit-recipe.git
-cd python-security-audit-recipe
-
-# Test the workflow locally (requires act)
-act -j security-audit
-```
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🏷️ Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
+- **License**: [MIT License](LICENSE) - see LICENSE file for details
+- **Changes**: [CHANGELOG.md](CHANGELOG.md) - version history and updates
 
 ## 🚀 Ready to Secure Your Python Project?
 
@@ -489,7 +330,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ```bash
 # One command to secure your project
-curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit-recipe/main/setup.py | python3
+curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/pysec-recipes/main/setup.py | python3
 ```
 
 ### **Why Thousands of Developers Choose This Recipe**
@@ -508,23 +349,34 @@ curl -sSL https://raw.githubusercontent.com/trivedi-vatsal/python-security-audit
 - 📢 **Share** with your team and network
 - 💬 **Join discussions** to learn and help others
 
-## 🔗 Connect & Contribute
+## 🔗 Connect & Learn More
 
-- **📖 Documentation**: [https://trivedi-vatsal.github.io/python-security-audit-recipe](https://trivedi-vatsal.github.io/python-security-audit-recipe)
-- **🐛 Issues**: [Report bugs or request features](https://github.com/trivedi-vatsal/python-security-audit-recipe/issues)
-- **💬 Discussions**: [Community discussions](https://github.com/trivedi-vatsal/python-security-audit-recipe/discussions)
-- **📧 Contact**: [Vatsal Trivedi](https://github.com/trivedi-vatsal)
+### 📖 **Documentation & Resources**
+
+- **🌟 [Complete Documentation](https://trivedi-vatsal.github.io/pysec-recipes/)** - Full guides and tutorials
+- **📋 [Examples Library](https://trivedi-vatsal.github.io/pysec-recipes/examples/)** - Real-world usage scenarios
+- **❓ [FAQ & Troubleshooting](https://trivedi-vatsal.github.io/pysec-recipes/faqs/)** - Common questions and solutions
+- **⚙️ [Configuration Guide](https://trivedi-vatsal.github.io/pysec-recipes/configuration/)** - Customize for your needs
+
+### 🤝 **Community & Support**
+
+- **🐛 [Issues](https://github.com/trivedi-vatsal/pysec-recipes/issues)** - Report bugs or request features
+- **💬 [Discussions](https://github.com/trivedi-vatsal/pysec-recipes/discussions)** - Community discussions and help
+- **📧 [Contact](https://github.com/trivedi-vatsal)** - Reach out to the maintainer
+
+### 🌟 **Join the Security-First Movement**
+
+- ⭐ **Star this repository** to show your support
+- 🔀 **Fork and contribute** to make Python security better
+- 📢 **Share with your team** and help others secure their code
+- 💬 **Join discussions** to learn and help the community
 
 ---
 
-<div align="center">
+## Made with ❤️ for the Python Security Community
 
-**Made with ❤️ for the Python security community**
+Transform your Python projects into security-first codebases with this powerful recipe! 🔐
 
-*Transform your Python projects into security-first codebases with this powerful recipe! 🔐*
-
-[![GitHub stars](https://img.shields.io/github/stars/trivedi-vatsal/python-security-audit-recipe?style=social)](https://github.com/trivedi-vatsal/python-security-audit-recipe)
-[![GitHub forks](https://img.shields.io/github/forks/trivedi-vatsal/python-security-audit-recipe?style=social)](https://github.com/trivedi-vatsal/python-security-audit-recipe)
-[![GitHub watchers](https://img.shields.io/github/watchers/trivedi-vatsal/python-security-audit-recipe?style=social)](https://github.com/trivedi-vatsal/python-security-audit-recipe)
-
-</div>
+[![GitHub stars](https://img.shields.io/github/stars/trivedi-vatsal/pysec-recipes?style=social)](https://github.com/trivedi-vatsal/pysec-recipes)
+[![GitHub forks](https://img.shields.io/github/forks/trivedi-vatsal/pysec-recipes?style=social)](https://github.com/trivedi-vatsal/pysec-recipes)
+[![GitHub watchers](https://img.shields.io/github/watchers/trivedi-vatsal/pysec-recipes?style=social)](https://github.com/trivedi-vatsal/pysec-recipes)

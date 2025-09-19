@@ -13,8 +13,8 @@ This guide will help you set up and run the MkDocs documentation site locally an
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/trivedi-vatsal/python-security-audit-recipe.git
-cd python-security-audit-recipe
+git clone https://github.com/trivedi-vatsal/pysec-recipes.git
+cd pysec-recipes
 ```
 
 ### 2. Create Virtual Environment
@@ -85,7 +85,7 @@ The GitHub Actions workflow will automatically:
 
 After setup, your documentation will be available at:
 
-**<https://trivedi-vatsal.github.io/python-security-audit-recipe>**
+**<https://trivedi-vatsal.github.io/pysec-recipes>**
 
 ## Development Commands
 
@@ -138,7 +138,7 @@ The documentation deploys automatically when:
 ## Project Structure
 
 ```text
-python-security-audit-recipe/
+pysec-recipes/
 ├── docs/                           # Documentation source files
 │   ├── index.md                   # Home page
 │   ├── workflow.md                # Complete workflow code
@@ -222,6 +222,6 @@ The site is configured in `mkdocs.yml`:
 ## Links
 
 - **Local Development**: <http://127.0.0.1:8000>
-- **Live GitHub Pages Site**: <https://trivedi-vatsal.github.io/python-security-audit-recipe>
-- **Repository**: <https://github.com/trivedi-vatsal/python-security-audit-recipe>
-- **GitHub Actions**: <https://github.com/trivedi-vatsal/python-security-audit-recipe/actions>
+- **Live GitHub Pages Site**: <https://trivedi-vatsal.github.io/pysec-recipes>
+- **Repository**: <https://github.com/trivedi-vatsal/pysec-recipes>
+- **GitHub Actions**: <https://github.com/trivedi-vatsal/pysec-recipes/actions>
