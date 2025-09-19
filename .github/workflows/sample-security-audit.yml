@@ -14,8 +14,18 @@ env:
 
 jobs:
   security-audit:
-    name: Security Audit
+    name: Security Audit (${{ matrix.requirements.name }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        requirements:
+          - name: "Requirements 1"
+            file: "sample/requirements-1.txt"
+            label: "req1"
+          - name: "Requirements 2"
+            file: "sample/requirements-2.txt"
+            label: "req2"
+      fail-fast: false
     permissions:
       contents: read
       issues: write
@@ -40,64 +50,65 @@ jobs:
       - name: Run pip-audit (JSON output)
         id: audit-json
         run: |
-          echo "Running pip-audit on requirements.txt..."
+          echo "Running pip-audit on ${{ matrix.requirements.file }}..."
 
           # Create outputs directory
           mkdir -p audit-outputs
 
           # Run pip-audit with JSON output for processing
-          pip-audit -r requirements.txt --format json --output audit-outputs/audit-results.json || echo "AUDIT_FAILED=true" >> $GITHUB_ENV
+          pip-audit -r ${{ matrix.requirements.file }} --format json --output audit-outputs/audit-results-${{ matrix.requirements.label }}.json || echo "AUDIT_FAILED=true" >> $GITHUB_ENV
 
           # Also create human-readable formats
-          pip-audit -r requirements.txt --format markdown --output audit-outputs/audit-results.md || true
-          pip-audit -r requirements.txt --format columns --output audit-outputs/audit-results.txt || true
+          pip-audit -r ${{ matrix.requirements.file }} --format markdown --output audit-outputs/audit-results-${{ matrix.requirements.label }}.md || true
+          pip-audit -r ${{ matrix.requirements.file }} --format columns --output audit-outputs/audit-results-${{ matrix.requirements.label }}.txt || true
 
       - name: Process audit results
         id: process-results
         run: |
           # Check if audit results file exists
-          if [ ! -f "audit-outputs/audit-results.json" ]; then
+          if [ ! -f "audit-outputs/audit-results-${{ matrix.requirements.label }}.json" ]; then
             echo "ERROR: Audit results file not found"
             echo "AUDIT_STATUS=error" >> $GITHUB_ENV
             exit 1
           fi
 
           # Parse JSON results
-          VULN_COUNT=$(jq '[.dependencies[].vulns[]] | length' audit-outputs/audit-results.json)
-          AFFECTED_PACKAGES=$(jq -r '.dependencies[] | select(.vulns | length > 0) | .name' audit-outputs/audit-results.json | wc -l)
+          VULN_COUNT=$(jq '[.dependencies[].vulns[]] | length' audit-outputs/audit-results-${{ matrix.requirements.label }}.json)
+          AFFECTED_PACKAGES=$(jq -r '.dependencies[] | select(.vulns | length > 0) | .name' audit-outputs/audit-results-${{ matrix.requirements.label }}.json | wc -l)
 
           echo "VULN_COUNT=$VULN_COUNT" >> $GITHUB_ENV
           echo "AFFECTED_PACKAGES=$AFFECTED_PACKAGES" >> $GITHUB_ENV
 
           if [ "$VULN_COUNT" -eq 0 ]; then
             echo "AUDIT_STATUS=clean" >> $GITHUB_ENV
-            echo "No vulnerabilities found!"
+            echo "No vulnerabilities found in ${{ matrix.requirements.name }}!"
           else
             echo "AUDIT_STATUS=vulnerabilities_found" >> $GITHUB_ENV
-            echo "Found $VULN_COUNT vulnerabilities in $AFFECTED_PACKAGES packages"
+            echo "Found $VULN_COUNT vulnerabilities in $AFFECTED_PACKAGES packages for ${{ matrix.requirements.name }}"
           fi
 
           # Create summary for issue body
-          echo "## 🔍 Security Audit Summary" > audit-outputs/issue-body.md
-          echo "" >> audit-outputs/issue-body.md
-          echo "**Scan Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> audit-outputs/issue-body.md
-          echo "**Repository:** ${{ github.repository }}" >> audit-outputs/issue-body.md
-          echo "**Branch:** ${{ github.ref_name }}" >> audit-outputs/issue-body.md
-          echo "**Commit:** ${{ github.sha }}" >> audit-outputs/issue-body.md
-          echo "" >> audit-outputs/issue-body.md
-          echo "**Vulnerabilities Found:** $VULN_COUNT" >> audit-outputs/issue-body.md
-          echo "**Affected Packages:** $AFFECTED_PACKAGES" >> audit-outputs/issue-body.md
-          echo "" >> audit-outputs/issue-body.md
+          echo "## 🔍 Security Audit Summary for ${{ matrix.requirements.name }}" > audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "**Requirements File:** ${{ matrix.requirements.file }}" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "**Scan Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "**Repository:** ${{ github.repository }}" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "**Branch:** ${{ github.ref_name }}" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "**Commit:** ${{ github.sha }}" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "**Vulnerabilities Found:** $VULN_COUNT" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "**Affected Packages:** $AFFECTED_PACKAGES" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+          echo "" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
 
           if [ "$VULN_COUNT" -gt 0 ]; then
-            echo "## 🚨 Vulnerability Details" >> audit-outputs/issue-body.md
-            echo "" >> audit-outputs/issue-body.md
-            cat audit-outputs/audit-results.md >> audit-outputs/issue-body.md
-            echo "" >> audit-outputs/issue-body.md
-            echo "## 📋 Recommendations" >> audit-outputs/issue-body.md
-            echo "" >> audit-outputs/issue-body.md
-            echo "1. Review each vulnerability listed above" >> audit-outputs/issue-body.md
-            echo "2. Update affected packages to the recommended fix versions" >> audit-outputs/issue-body.md
+            echo "## 🚨 Vulnerability Details" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+            echo "" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+            cat audit-outputs/audit-results-${{ matrix.requirements.label }}.md >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+            echo "" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+            echo "## 📋 Recommendations" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+            echo "" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+            echo "1. Review each vulnerability listed above" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
+            echo "2. Update affected packages to the recommended fix versions" >> audit-outputs/issue-body-${{ matrix.requirements.label }}.md
             echo "3. Test the application after updates" >> audit-outputs/issue-body.md
             echo "4. Consider using \`pip-audit --fix\` for automatic updates (with caution)" >> audit-outputs/issue-body.md
             echo "" >> audit-outputs/issue-body.md
@@ -124,7 +135,7 @@ jobs:
       - name: Upload audit artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: security-audit-results-${{ github.run_number }}
+          name: security-audit-${{ matrix.requirements.label }}-${{ github.run_number }}
           path: audit-outputs/
           retention-days: 90
 
@@ -137,24 +148,25 @@ jobs:
             const fs = require('fs');
             const path = require('path');
 
-            // Read the issue body
-            const issueBody = fs.readFileSync('audit-outputs/issue-body.md', 'utf8');
+            // Read the issue body for this specific requirements file
+            const issueBody = fs.readFileSync('audit-outputs/issue-body-${{ matrix.requirements.label }}.md', 'utf8');
 
-            // Check for existing open security audit issues
+            // Check for existing open security audit issues for this specific requirements file
             const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
-              labels: 'security,pip-audit',
+              labels: 'security,pip-audit,${{ matrix.requirements.label }}',
               per_page: 100
             });
 
             const existingIssue = issues.find(issue =>
               issue.title.includes('Security Audit') &&
+              issue.title.includes('${{ matrix.requirements.name }}') &&
               issue.title.includes('vulnerabilities found')
             );
 
-            const issueTitle = `🚨 Security Audit: ${process.env.VULN_COUNT} vulnerabilities found in dependencies`;
+            const issueTitle = `🚨 Security Audit (${{ matrix.requirements.name }}): ${process.env.VULN_COUNT} vulnerabilities found`;
 
             if (existingIssue) {
               // Update existing issue
@@ -175,7 +187,7 @@ jobs:
                 repo: context.repo.repo,
                 title: issueTitle,
                 body: issueBody,
-                labels: ['security', 'pip-audit', 'vulnerability', 'dependencies']
+                labels: ['security', 'pip-audit', 'vulnerability', 'dependencies', '${{ matrix.requirements.label }}']
               });
 
               console.log(`Created new issue #${newIssue.number}`);
@@ -189,20 +201,20 @@ jobs:
           script: |
             const fs = require('fs');
 
-            // Read the issue body
-            const issueBody = fs.readFileSync('audit-outputs/issue-body.md', 'utf8');
+            // Read the issue body for this specific requirements file
+            const issueBody = fs.readFileSync('audit-outputs/issue-body-${{ matrix.requirements.label }}.md', 'utf8');
 
-            // Close any existing vulnerability issues
+            // Close any existing vulnerability issues for this specific requirements file
             const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
-              labels: 'security,pip-audit',
+              labels: 'security,pip-audit,${{ matrix.requirements.label }}',
               per_page: 100
             });
 
             for (const issue of issues) {
-              if (issue.title.includes('vulnerabilities found')) {
+              if (issue.title.includes('${{ matrix.requirements.name }}') && issue.title.includes('vulnerabilities found')) {
                 await github.rest.issues.update({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -215,20 +227,20 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issue.number,
-                  body: '✅ Vulnerabilities have been resolved. This issue is now closed.'
+                  body: '✅ Vulnerabilities in ${{ matrix.requirements.name }} have been resolved. This issue is now closed.'
                 });
 
-                console.log(`Closed resolved issue #${issue.number}`);
+                console.log(`Closed resolved issue #${issue.number} for ${{ matrix.requirements.name }}`);
               }
             }
 
-            // Create a weekly clean report issue
+            // Create a weekly clean report issue for this requirements file
             const { data: newIssue } = await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `✅ Weekly Security Audit: No vulnerabilities found`,
+              title: `✅ Security Audit (${{ matrix.requirements.name }}): No vulnerabilities found`,
               body: issueBody,
-              labels: ['security', 'pip-audit', 'clean']
+              labels: ['security', 'pip-audit', 'clean', '${{ matrix.requirements.label }}']
             });
 
             // Auto-close the clean report issue after creation
@@ -245,7 +257,8 @@ jobs:
       - name: Comment on workflow status
         if: always()
         run: |
-          echo "## 📊 Workflow Summary"
+          echo "## 📊 Workflow Summary (${{ matrix.requirements.name }})"
+          echo "- **Requirements File:** ${{ matrix.requirements.file }}"
           echo "- **Status:** ${{ job.status }}"
           echo "- **Audit Status:** $AUDIT_STATUS"
           echo "- **Vulnerabilities Found:** ${VULN_COUNT:-0}"
@@ -256,6 +269,6 @@ jobs:
       - name: Fail workflow if vulnerabilities found
         if: env.AUDIT_STATUS == 'vulnerabilities_found' && github.event_name != 'schedule'
         run: |
-          echo "❌ Security vulnerabilities detected in dependencies!"
+          echo "❌ Security vulnerabilities detected in ${{ matrix.requirements.name }}!"
           echo "Check the created issue for details and remediation steps."
           exit 1

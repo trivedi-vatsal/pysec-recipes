@@ -6,15 +6,16 @@ on:
     - cron: "0 8 * * 1"
   # Allow manual triggering
   workflow_dispatch:
-  # Also run on pushes to main branch that change requirements.txt
+  # Also run on pushes to main branch that change requirements file or workflow
   push:
     branches: [main] # Update this to your default branch
     paths:
-      - "requirements.txt"
+      - "requirements.txt" # Update this path to match REQUIREMENTS_FILE env var
       - ".github/workflows/security-audit.yml"
 
 env:
   PYTHON_VERSION: "3.11" # Update this to your preferred Python version
+  REQUIREMENTS_FILE: "requirements.txt" # Update this to your requirements file path
 
 jobs:
   security-audit:
@@ -44,17 +45,17 @@ jobs:
       - name: Run pip-audit (JSON output)
         id: audit-json
         run: |
-          echo "Running pip-audit on requirements.txt..."
+          echo "Running pip-audit on ${{ env.REQUIREMENTS_FILE }}..."
 
           # Create outputs directory
           mkdir -p audit-outputs
 
           # Run pip-audit with JSON output for processing
-          pip-audit -r requirements.txt --format json --output audit-outputs/audit-results.json || echo "AUDIT_FAILED=true" >> $GITHUB_ENV
+          pip-audit -r ${{ env.REQUIREMENTS_FILE }} --format json --output audit-outputs/audit-results.json || echo "AUDIT_FAILED=true" >> $GITHUB_ENV
 
           # Also create human-readable formats
-          pip-audit -r requirements.txt --format markdown --output audit-outputs/audit-results.md || true
-          pip-audit -r requirements.txt --format columns --output audit-outputs/audit-results.txt || true
+          pip-audit -r ${{ env.REQUIREMENTS_FILE }} --format markdown --output audit-outputs/audit-results.md || true
+          pip-audit -r ${{ env.REQUIREMENTS_FILE }} --format columns --output audit-outputs/audit-results.txt || true
 
       - name: Process audit results
         id: process-results
@@ -84,6 +85,7 @@ jobs:
           # Create summary for issue body
           echo "## 🔍 Security Audit Summary" > audit-outputs/issue-body.md
           echo "" >> audit-outputs/issue-body.md
+          echo "**Requirements File:** ${{ env.REQUIREMENTS_FILE }}" >> audit-outputs/issue-body.md
           echo "**Scan Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> audit-outputs/issue-body.md
           echo "**Repository:** ${{ github.repository }}" >> audit-outputs/issue-body.md
           echo "**Branch:** ${{ github.ref_name }}" >> audit-outputs/issue-body.md
@@ -109,13 +111,13 @@ jobs:
             echo "" >> audit-outputs/issue-body.md
             echo "\`\`\`bash" >> audit-outputs/issue-body.md
             echo "# Review the vulnerabilities" >> audit-outputs/issue-body.md
-            echo "pip-audit -r requirements.txt" >> audit-outputs/issue-body.md
+            echo "pip-audit -r ${{ env.REQUIREMENTS_FILE }}" >> audit-outputs/issue-body.md
             echo "" >> audit-outputs/issue-body.md
             echo "# Attempt automatic fixes (use with caution)" >> audit-outputs/issue-body.md
-            echo "pip-audit -r requirements.txt --fix" >> audit-outputs/issue-body.md
+            echo "pip-audit -r ${{ env.REQUIREMENTS_FILE }} --fix" >> audit-outputs/issue-body.md
             echo "\`\`\`" >> audit-outputs/issue-body.md
           else
-            echo "✅ **No vulnerabilities detected in requirements.txt**" >> audit-outputs/issue-body.md
+            echo "✅ **No vulnerabilities detected in ${{ env.REQUIREMENTS_FILE }}**" >> audit-outputs/issue-body.md
             echo "" >> audit-outputs/issue-body.md
             echo "All dependencies appear to be secure based on the current vulnerability databases." >> audit-outputs/issue-body.md
           fi
@@ -250,6 +252,7 @@ jobs:
         if: always()
         run: |
           echo "## 📊 Workflow Summary"
+          echo "- **Requirements File:** ${{ env.REQUIREMENTS_FILE }}"
           echo "- **Status:** ${{ job.status }}"
           echo "- **Audit Status:** $AUDIT_STATUS"
           echo "- **Vulnerabilities Found:** ${VULN_COUNT:-0}"
