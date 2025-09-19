@@ -1,0 +1,262 @@
+{% extends "main.html" %}
+
+<!-- Tailwind CSS CDN -->
+{% block extrahead %}
+<!-- Tailwind (CDN for demo) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+  rel="stylesheet"
+/>
+
+<style>
+  :root {
+    --ring: 0 0% 100%;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI,
+      Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+  }
+  /* Subtle gradient background */
+  .bg-grid {
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px
+    );
+    background-size: 18px 18px;
+  }
+  /* Floating blob animation */
+  .blob {
+    filter: blur(40px);
+    opacity: 0.55;
+    animation: float 12s ease-in-out infinite;
+  }
+  .blob-2 {
+    animation-delay: -4s;
+  }
+  .blob-3 {
+    animation-delay: -8s;
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-16px);
+    }
+  }
+
+  .copied::after {
+    content: "Copied!";
+  }
+  /* Card hover ring */
+  .card:hover {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+  }
+</style>
+{% endblock %}
+
+<!-- Remove default content wrapper -->
+{% block tabs %} {{ super() }}
+
+<div class="bg-slate-950 text-slate-100 selection:bg-fuchsia-500/30">
+  <!-- Hero -->
+  <header class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-indigo-900 via-slate-950 to-slate-950 opacity-90"
+    ></div>
+    <div
+      class="absolute -top-24 -left-24 w-[42rem] h-[42rem] bg-fuchsia-500/20 rounded-full blob"
+    ></div>
+    <div
+      class="absolute top-40 -right-24 w-[40rem] h-[40rem] bg-indigo-500/20 rounded-full blob blob-2"
+    ></div>
+    <div
+      class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] bg-cyan-400/20 rounded-full blob blob-3"
+    ></div>
+
+    <div class="relative max-w-6xl mx-auto px-6 pt-10 py-28 text-center">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs tracking-wide"
+      >
+        <span>Zero‑config • GitHub Actions • pip‑audit</span>
+      </div>
+      <h1 class="mt-6 text-5xl md:text-7xl font-black leading-tight">
+        Python Security
+        <br />
+        <span
+          class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-indigo-300"
+          >Audit Recipe</span
+        >
+      </h1>
+      <p class="mt-6 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+        A tiny, powerful workflow to keep your Python dependencies
+        <em>safe</em>—with smart issues, clean reports, and no yak‑shaving.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <a
+          href="{{ config.repo_url }}"
+          class="px-6 py-3 rounded-2xl bg-white/10 border border-white/20 font-semibold hover:bg-white/20 transition"
+          >📦 View on GitHub</a
+        >
+      </div>
+      <div class="mt-8 text-sm text-slate-400">
+        Works with any Python project • 30s setup • Weekly scans by default
+      </div>
+    </div>
+  </header>
+
+  <!-- Value props (concise) -->
+  <section class="relative py-16 bg-grid">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6">
+      <article class="card rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h3 class="text-xl font-bold">🔍 Multi‑Tool Ready</h3>
+        <p class="mt-2 text-slate-300">
+          Ships with <span class="font-semibold">pip‑audit</span> and slots for
+          Bandit/Semgrep—toggle what you need.
+        </p>
+      </article>
+      <article class="card rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h3 class="text-xl font-bold">⚡ Zero Config</h3>
+        <p class="mt-2 text-slate-300">
+          Drop in the workflow—get issues, artifacts, and status without
+          touching a line of code.
+        </p>
+      </article>
+      <article class="card rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h3 class="text-xl font-bold">🔔 Smart Signals</h3>
+        <p class="mt-2 text-slate-300">
+          Noise‑free GitHub issues when vulnerabilities appear; auto‑close when
+          clean.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Quickstart compact -->
+
+  <!-- Small recipe grid -->
+  <section class="relative py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-black">Pick a Recipe</h2>
+      <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a
+          href="examples/basic/"
+          class="group rounded-2xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
+        >
+          <div class="text-2xl">🏠</div>
+          <div class="mt-2 font-semibold">Basic</div>
+          <p class="text-sm text-slate-300">Single requirements.txt</p>
+          <span
+            class="mt-3 inline-block text-xs text-cyan-300 group-hover:translate-x-1 transition"
+            >Open →</span
+          >
+        </a>
+        <a
+          href="examples/multi-environment/"
+          class="group rounded-2xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
+        >
+          <div class="text-2xl">🏢</div>
+          <div class="mt-2 font-semibold">Enterprise</div>
+          <p class="text-sm text-slate-300">Dev / Staging / Prod</p>
+          <span
+            class="mt-3 inline-block text-xs text-cyan-300 group-hover:translate-x-1 transition"
+            >Open →</span
+          >
+        </a>
+        <a
+          href="examples/django/"
+          class="group rounded-2xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
+        >
+          <div class="text-2xl">🧩</div>
+          <div class="mt-2 font-semibold">Django</div>
+          <p class="text-sm text-slate-300">Framework checks</p>
+          <span
+            class="mt-3 inline-block text-xs text-cyan-300 group-hover:translate-x-1 transition"
+            >Open →</span
+          >
+        </a>
+        <a
+          href="examples/fastapi/"
+          class="group rounded-2xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
+        >
+          <div class="text-2xl">⚡</div>
+          <div class="mt-2 font-semibold">FastAPI</div>
+          <p class="text-sm text-slate-300">Async + env split</p>
+          <span
+            class="mt-3 inline-block text-xs text-cyan-300 group-hover:translate-x-1 transition"
+            >Open →</span
+          >
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Micro FAQ (useful & tiny) -->
+  <section class="relative py-16">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-black">Quick FAQ</h2>
+      <div class="mt-6 space-y-3">
+        <details class="rounded-xl border border-white/10 bg-white/5 p-4" open>
+          <summary class="font-semibold cursor-pointer text-sm">
+            Can I fail CI when vulnerabilities are found?
+          </summary>
+          <p class="mt-2 text-slate-300 text-xs">
+            Yes—add a step that checks the parsed count and
+            <code>exit 1</code> when non‑zero.
+          </p>
+        </details>
+        <details class="rounded-xl border border-white/10 bg-white/5 p-4">
+          <summary class="font-semibold cursor-pointer text-sm">
+            Where do I see results?
+          </summary>
+          <p class="mt-2 text-slate-300 text-xs">
+            In <strong>Actions → Artifacts</strong> (audit.json) and an
+            auto‑managed GitHub Issue titled "Security Audit …".
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="relative py-16">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <div
+        class="rounded-3xl border border-white/10 bg-gradient-to-r from-cyan-500/10 via-fuchsia-500/10 to-indigo-500/10 p-10"
+      >
+        <h2 class="text-3xl md:text-4xl font-black">
+          Ready to secure your repo?
+        </h2>
+        <p class="mt-3 text-slate text-sm">
+          Start with one command—or grab the minimal YAML and go.
+        </p>
+        <div class="mt-6 flex flex-wrap justify-center gap-3 text-sm">
+          <a
+            href="examples/basic/"
+            class="px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-slate-900 font-semibold shadow-lg hover:scale-[1.02] transition"
+            >🍳 Browse Recipes</a
+          >
+          <a
+            href="{{ config.repo_url }}"
+            class="px-6 py-3 rounded-2xl bg-white/10 border border-white/20 font-semibold hover:bg-white/20 transition"
+            >⭐ Star on GitHub</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}
+
+<!-- Override content block to prevent duplicate content -->
+{% block content %} {% endblock %}

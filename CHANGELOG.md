@@ -5,6 +5,55 @@ All notable changes to the Python Security Audit Recipe will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-09-20
+
+### Added
+
+- **Enhanced Documentation Structure**: Complete MkDocs-based documentation with comprehensive guides
+- **Recipe Examples**: Detailed examples for Django, FastAPI, basic, multi-environment, and monorepo setups
+- **Configuration Guide**: Advanced configuration options for customizing security audit workflows
+- **Workflow Documentation**: Complete workflow code with detailed explanations and best practices
+- **Getting Started Guide**: Step-by-step guide for new users with prerequisites and setup instructions
+- **Installation Guide**: Comprehensive installation documentation for different project types
+- **Issue Templates Documentation**: Detailed guide for GitHub issue templates and management
+- **Project Infrastructure**: Enhanced gitignore and requirements for documentation builds
+
+### Changed
+
+- **Renamed Documentation File**: `LOCAL_DEVELOPMENT.md` → `MKDOCS.md` for better clarity
+- **Enhanced MkDocs Configuration**: Improved theme, navigation, and plugin configuration
+- **Improved README**: Enhanced with better structure, clearer instructions, and more comprehensive feature descriptions
+- **Better Project Structure**: More organized documentation hierarchy with logical grouping
+
+### Documentation Additions
+
+- **Recipe Examples**: Five detailed examples covering different project types and use cases
+- **Configuration Management**: Advanced configuration options for different environments
+- **Workflow Mechanics**: Deep dive into GitHub Actions workflow components
+- **Issue Templates**: Complete guide for managing security notification issues
+- **Getting Started**: Comprehensive onboarding experience for new users
+
+### Files Added
+
+- `docs/configuration.md` - Advanced configuration guide
+- `docs/examples.md` - Recipe examples overview
+- `docs/examples/basic.md` - Basic project example
+- `docs/examples/django.md` - Django application example
+- `docs/examples/fastapi.md` - FastAPI application example
+- `docs/examples/monorepo.md` - Monorepo setup example
+- `docs/examples/multi-environment.md` - Multi-environment configuration
+- `docs/getting-started.md` - Getting started guide
+- `docs/workflow.md` - Complete workflow documentation
+- `.gitignore` - Comprehensive gitignore for Python projects
+- `requirements-docs.txt` - Documentation build dependencies
+
+### Infrastructure Improvements
+
+- **MkDocs Integration**: Full documentation site generation with Material theme
+- **Enhanced Navigation**: Logical documentation structure with progress tracking
+- **Code Highlighting**: Improved syntax highlighting for code examples
+- **Documentation Build System**: Streamlined documentation generation process
+
 ## [1.0.0] - 2025-09-19
 
 ### Added
@@ -58,51 +107,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Provides detailed remediation instructions
 - Supports vulnerability exclusions for false positives
 - Implements secure GitHub Actions practices
-
-## Version History
-
-### Release Notes
-
-**v1.0.0** represents the initial stable release of the Python Security Audit Recipe. This version provides a complete, production-ready solution for automated Python dependency security auditing in GitHub repositories.
-
-The recipe includes everything needed to implement automated security scanning:
-
-- Complete GitHub Actions workflow
-- Issue templates for consistent reporting
-- Setup automation for easy adoption
-- Comprehensive documentation
-- Example configurations for various scenarios
-
-### Breaking Changes
-
-- N/A (Initial release)
-
-### Migration Guide
-
-- N/A (Initial release)
-
-### Known Issues
-
-- None at this time
-
-### Upcoming Features (Future Releases)
-
-- Integration with additional security tools (Bandit, Safety)
-- Support for Poetry and Pipenv dependency files
-- Enhanced reporting with vulnerability severity filtering
-- Slack/Teams notification integration examples
-- Container image scanning capabilities
-- Security policy automation
-- Integration with GitHub Security Advisories
-
-### Maintenance
-
-This recipe is actively maintained and updated to ensure compatibility with:
-
-- Latest versions of `pip-audit`
-- Current GitHub Actions features
-- Python security best practices
-- Community feedback and contributions
 
 ---
 

@@ -1,0 +1,87 @@
+site_name: PySec Recipe
+site_description: Code examples and configurations for Python security auditing
+repo_url: https://github.com/trivedi-vatsal/python-security-audit-recipe
+repo_name: trivedi-vatsal/python-security-audit-recipe
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  palette:
+    - scheme: slate
+      primary: black
+      accent: blue grey
+  features:
+    - content.code.copy
+    - content.code.select
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - navigation.expand
+    - navigation.path
+    - navigation.prune
+    - navigation.footer
+    - search.highlight
+    - search.share
+    - search.suggest
+    - content.action.edit
+    - content.action.view
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.annotate
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/trivedi-vatsal/python-security-audit-recipe
+    - icon: fontawesome/solid/globe
+      link: https://vatsal.xyz
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Overview: getting-started.md
+      - Installation: installation.md
+      - Workflow: workflow.md
+      - Issue Templates: issue-templates.md
+      - Configuration: configuration.md
+  - Recipes/Examples:
+      - Recipes: examples.md
+      - Basic Example: examples/basic.md
+      - Multi-Environment: examples/multi-environment.md
+      - Django Project: examples/django.md
+      - FastAPI Project: examples/fastapi.md
+      - Monorepo: examples/monorepo.md
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - codehilite:
+      use_pygments: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: yaml
+          class: yaml
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - pymdownx.details
