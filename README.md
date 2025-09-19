@@ -123,9 +123,9 @@ your-repo/
 🚨 Security Audit: 3 vulnerabilities found in dependencies
 
 ## 🔍 Security Audit Summary
-- **Vulnerabilities Found:** 3
-- **Affected Packages:** 2
-- **Scan Date:** 2025-09-19 08:00:00 UTC
+- Vulnerabilities Found: 3
+- Affected Packages: 2
+- Scan Date: 2025-09-19 08:00:00 UTC
 
 ## 🚨 Vulnerability Details
 | Package | Version | Vulnerability ID | Fix Version |
@@ -134,7 +134,6 @@ your-repo/
 | urllib3 | 1.26.5 | GHSA-v845-jxx5-vc9f | >=1.26.17 |
 
 ## 🔧 Manual Fix Commands
-```bash
 pip install requests>=2.31.0 urllib3>=1.26.17
 pip-audit --fix  # Automatic fix (use with caution)
 ```
@@ -145,6 +144,7 @@ pip-audit --fix  # Automatic fix (use with caution)
 ✅ Weekly Security Audit: No vulnerabilities found
 
 All dependencies scanned successfully against latest vulnerability databases.
+
 No known security issues detected.
 ```
 
@@ -298,7 +298,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. Areas for 
 ### Development Setup
 
 ```bash
-git clone https://github.com/your-username/python-security-audit-recipe.git
+git clone https://github.com/trivedi-vatsal/python-security-audit-recipe.git
 cd python-security-audit-recipe
 
 # Test the workflow locally (requires act)
