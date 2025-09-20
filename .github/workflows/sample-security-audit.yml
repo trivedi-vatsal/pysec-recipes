@@ -3,12 +3,13 @@ name: Sample Requirements Security Audit
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "sample/requirements-1.txt"
-      - "sample/requirements-2.txt"
-      - ".github/workflows/sample-security-audit.yml"
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "sample/requirements-1.txt"
+  #     - "sample/requirements-2.txt"
+  #     - ".github/workflows/sample-security-audit.yml"
+  
 env:
   PYTHON_VERSION: "3.11" # Update this to your preferred Python version
 
