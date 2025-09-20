@@ -3,10 +3,13 @@ site_description: Code examples and configurations for Python security auditing
 site_url: https://trivedi-vatsal.github.io/pysec-recipes/
 repo_url: https://github.com/trivedi-vatsal/pysec-recipes
 repo_name: trivedi-vatsal/pysec-recipes
+edit_uri: edit/main/docs/
 copyright: Copyright &copy; 2025 Vatsal Trivedi
 
 theme:
   name: material
+  logo: material/shield-check
+  favicon: material/shield-check
   custom_dir: docs/overrides
   palette:
     - scheme: slate
