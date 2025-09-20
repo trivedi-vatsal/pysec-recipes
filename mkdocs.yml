@@ -8,8 +8,6 @@ copyright: Copyright &copy; 2025 Vatsal Trivedi
 
 theme:
   name: material
-  logo: material/shield-check
-  favicon: material/shield-check
   custom_dir: docs/overrides
   palette:
     - scheme: slate
