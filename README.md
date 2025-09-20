@@ -102,9 +102,7 @@ Have questions or need help? The documentation is here for you.
 * **❓ [FAQs & Troubleshooting](https://trivedi-vatsal.github.io/pysec-recipes/faqs/)** - Find answers to common issues.
 * **🐛 [Report an Issue](https://github.com/trivedi-vatsal/pysec-recipes/issues)** - Report bugs or request features.
 
-## 🤝 Contributing
-
-This recipe is a open effort. Your contributions are welcome\! If you have ideas for new features, better reporting, or bug fixes, please check out the **[Contributing Guide](https://trivedi-vatsal.github.io/pysec-recipes/contributing/)**.
+This recipe is a open effort. Your contributions are welcome\! If you have ideas for new features, better reporting, or bug fixes
 
 ## Made with ❤️ for the Python Security
 
